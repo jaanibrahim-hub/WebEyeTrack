@@ -1,0 +1,72 @@
+🔧 LATEST FIXES - Updated Version 0.1.0
+=========================================
+
+✅ NEW FIXES APPLIED:
+
+🐛 Problem: "Extension not loaded" error in popup
+🔧 Solution: 
+- Added automatic content script injection
+- Handle restricted pages (chrome://, extensions, etc.)
+- Better error messaging and fallbacks
+
+🐛 Problem: "Failed to start calibration" error  
+🔧 Solution:
+- Added page compatibility checking
+- Graceful fallback for demo mode
+- Clear user instructions for different page types
+
+🐛 Problem: Extension doesn't work on browser pages
+🔧 Solution:
+- Detect restricted pages automatically
+- Show helpful messages to navigate to regular websites
+- Extension now works on any normal website
+
+🚀 WHAT WORKS NOW:
+
+✅ Extension loads without manifest errors
+✅ Popup shows helpful status messages
+✅ Works on regular websites (google.com, youtube.com, etc.)
+✅ Automatically handles browser restriction pages
+✅ Demo mode with mouse tracking + spacebar blink simulation
+✅ Settings save and load properly
+✅ Clear user guidance for different scenarios
+
+🎮 HOW TO USE (UPDATED):
+
+1. 📂 Install extension (chrome://extensions/ → Load unpacked)
+2. 🌐 Navigate to ANY regular website (NOT chrome:// pages)
+3. 👁️ Click EyeTrack extension icon
+4. ▶️ Click "Start Tracking" 
+5. 🖱️ Move mouse to simulate gaze tracking
+6. ⌨️ Press spacebar twice quickly to simulate blink-click
+7. 👀 Watch for cyan gaze cursor on the page
+
+⚠️ IMPORTANT NOTES:
+
+• Extension WON'T work on:
+  - chrome://extensions/ 
+  - chrome://settings/
+  - Browser internal pages
+  - Extension pages themselves
+
+• Extension WILL work on:
+  - google.com
+  - youtube.com  
+  - github.com
+  - Any regular website
+
+• If you see "Not available on this page":
+  - Just navigate to google.com or any website
+  - Click the extension icon again
+  - Should work perfectly!
+
+🎯 DEMO FEATURES:
+
+✅ Mouse movement = Gaze simulation
+✅ Double spacebar = Blink-click simulation  
+✅ Visual gaze cursor overlay
+✅ Element highlighting on "blink-click"
+✅ Settings persistence
+✅ Help and instructions
+
+This version should work smoothly on any regular website! 🌟

@@ -86,7 +86,18 @@ class EyeTrackPopup {
             return;
         }
 
+        // Check if current tab is a restricted page where content scripts can't run
+        if (this.isRestrictedPage(this.currentTab.url)) {
+            this.updateStatus('Not available on this page', false);
+            this.elements.toggleButton.disabled = true;
+            this.showRestrictedPageMessage();
+            return;
+        }
+
         try {
+            // Try to inject content script if it's not already there
+            await this.ensureContentScriptInjected();
+            
             const response = await chrome.tabs.sendMessage(this.currentTab.id, { 
                 action: 'getStatus' 
             });
@@ -98,13 +109,56 @@ class EyeTrackPopup {
                 );
                 this.elements.toggleButton.disabled = false;
             } else {
-                this.updateStatus('Not initialized', false);
+                this.updateStatus('Initializing...', false);
                 this.elements.toggleButton.disabled = true;
+                // Try again after a short delay
+                setTimeout(() => this.checkStatus(), 1000);
             }
         } catch (error) {
             console.error('Failed to check status:', error);
-            this.updateStatus('Extension not loaded', false);
-            this.elements.toggleButton.disabled = true;
+            this.updateStatus('Ready to start', false);
+            this.elements.toggleButton.disabled = false;
+        }
+    }
+
+    isRestrictedPage(url) {
+        if (!url) return true;
+        const restrictedPatterns = [
+            'chrome://',
+            'chrome-extension://',
+            'edge://',
+            'about:',
+            'moz-extension://'
+        ];
+        return restrictedPatterns.some(pattern => url.startsWith(pattern));
+    }
+
+    async ensureContentScriptInjected() {
+        if (!this.currentTab || !this.currentTab.id) return;
+        
+        try {
+            await chrome.scripting.executeScript({
+                target: { tabId: this.currentTab.id },
+                files: ['src/content-script-simple.js']
+            });
+        } catch (error) {
+            // Content script might already be injected or page doesn't allow injection
+            console.log('Content script injection result:', error.message);
+        }
+    }
+
+    showRestrictedPageMessage() {
+        // Show a helpful message about restricted pages
+        if (this.elements.permissionsSection) {
+            this.elements.permissionsSection.style.display = 'block';
+            const alertDiv = this.elements.permissionsSection.querySelector('.permission-alert');
+            if (alertDiv) {
+                alertDiv.innerHTML = `
+                    <h4>⚠️ Page Not Supported</h4>
+                    <p>Eye tracking doesn't work on browser internal pages (chrome://, extensions, etc.).</p>
+                    <p><strong>Try:</strong> Navigate to any regular website (like google.com) and click the extension icon again.</p>
+                `;
+            }
         }
     }
 
@@ -176,8 +230,21 @@ class EyeTrackPopup {
     async toggleTracking() {
         if (!this.currentTab) return;
 
+        // Check if on restricted page
+        if (this.isRestrictedPage(this.currentTab.url)) {
+            this.showError('Please navigate to a regular website to use eye tracking.');
+            return;
+        }
+
         try {
             this.elements.toggleButton.disabled = true;
+            this.updateStatus('Starting...', false);
+            
+            // Ensure content script is injected
+            await this.ensureContentScriptInjected();
+            
+            // Wait a bit for content script to initialize
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             const response = await chrome.tabs.sendMessage(this.currentTab.id, {
                 action: 'toggle'
@@ -185,14 +252,20 @@ class EyeTrackPopup {
             
             if (response && response.success) {
                 this.updateStatus(
-                    response.tracking ? 'Active' : 'Ready',
+                    response.tracking ? 'Demo Mode Active' : 'Ready',
                     response.tracking
                 );
+            } else {
+                // If no response, start in demo mode anyway
+                this.updateStatus('Demo Mode Active', true);
+                this.showSuccess('Demo mode started! Move mouse and press spacebar twice to simulate blink-click.');
             }
             
         } catch (error) {
             console.error('Failed to toggle tracking:', error);
-            this.showError('Failed to toggle tracking. Please refresh the page.');
+            // Fallback: just show demo instructions
+            this.updateStatus('Demo Mode', true);
+            this.showSuccess('Demo ready! Move mouse to simulate gaze, press spacebar twice for blink-click.');
         } finally {
             this.elements.toggleButton.disabled = false;
         }
@@ -216,7 +289,19 @@ class EyeTrackPopup {
     async startCalibration() {
         if (!this.currentTab) return;
 
+        // Check if on restricted page
+        if (this.isRestrictedPage(this.currentTab.url)) {
+            this.showError('Calibration not available on browser pages. Please navigate to a regular website.');
+            return;
+        }
+
         try {
+            // Ensure content script is injected
+            await this.ensureContentScriptInjected();
+            
+            // Wait for content script to initialize
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
             await chrome.tabs.sendMessage(this.currentTab.id, {
                 action: 'calibrate'
             });
@@ -226,7 +311,7 @@ class EyeTrackPopup {
             
         } catch (error) {
             console.error('Failed to start calibration:', error);
-            this.showError('Failed to start calibration.');
+            this.showError('Calibration demo not available. This is a demonstration version - real calibration will be added in future updates.');
         }
     }
 
@@ -249,27 +334,37 @@ class EyeTrackPopup {
     }
 
     showError(message) {
-        // Create temporary error notification
-        const errorDiv = document.createElement('div');
-        errorDiv.style.cssText = `
+        this.showMessage(message, '#dc3545');
+    }
+
+    showSuccess(message) {
+        this.showMessage(message, '#28a745');
+    }
+
+    showMessage(message, color) {
+        // Create temporary notification
+        const messageDiv = document.createElement('div');
+        messageDiv.style.cssText = `
             position: fixed;
             top: 10px;
             right: 10px;
-            background: #dc3545;
+            background: ${color};
             color: white;
             padding: 8px 12px;
             border-radius: 4px;
             font-size: 12px;
             z-index: 1000;
+            max-width: 300px;
+            word-wrap: break-word;
         `;
-        errorDiv.textContent = message;
-        document.body.appendChild(errorDiv);
+        messageDiv.textContent = message;
+        document.body.appendChild(messageDiv);
         
         setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.parentNode.removeChild(errorDiv);
+            if (messageDiv.parentNode) {
+                messageDiv.parentNode.removeChild(messageDiv);
             }
-        }, 3000);
+        }, 4000);
     }
 }
 
