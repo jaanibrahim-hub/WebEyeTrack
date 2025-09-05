@@ -1,0 +1,32 @@
+{
+  "name": "eyetrack-browser-extension",
+  "version": "0.1.0",
+  "description": "Browser extension for eye tracking and gaze navigation",
+  "main": "src/background/service-worker.js",
+  "scripts": {
+    "build": "npm run build:webeyetrack && npm run build:extension",
+    "build:webeyetrack": "npm run copy:webeyetrack && npm run bundle:webeyetrack",
+    "build:extension": "npm run copy:assets",
+    "copy:webeyetrack": "cp -r ../js/src/* src/webeyetrack/",
+    "bundle:webeyetrack": "webpack --config webpack.config.js",
+    "copy:assets": "npm run create:icons",
+    "create:icons": "node scripts/create-icons.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "clean": "rm -rf dist && rm -rf src/webeyetrack/*",
+    "dev": "npm run build && npm run watch"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.251",
+    "copy-webpack-plugin": "^11.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.8",
+    "@tensorflow/tfjs": "^4.22.0",
+    "ml-matrix": "^6.12.1",
+    "worker-loader": "^3.0.8"
+  }
+}

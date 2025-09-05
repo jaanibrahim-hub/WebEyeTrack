@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "EyeTrack Browser - Gaze Navigation",
+  "version": "0.1.0",
+  "description": "Navigate the web with your eyes! Eye tracking with blink-to-click functionality for accessibility.",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/content/content-script-simple.js"
+      ],
+      "css": ["src/content/overlay.css"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "EyeTrack Browser",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  
+  "options_page": "options/options.html",
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/webeyetrack/*",
+        "assets/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
