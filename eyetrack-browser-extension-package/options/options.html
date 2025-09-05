@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeTrack Browser - Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <img src="../assets/icon48.png" alt="EyeTrack Browser" class="logo">
+                <div class="header-text">
+                    <h1>EyeTrack Browser</h1>
+                    <p>Advanced Settings & Configuration</p>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="general">General</button>
+            <button class="tab-button" data-tab="tracking">Eye Tracking</button>
+            <button class="tab-button" data-tab="gestures">Gestures</button>
+            <button class="tab-button" data-tab="help">Help</button>
+        </nav>
+
+        <main class="content">
+            <!-- General Settings Tab -->
+            <section id="general" class="tab-content active">
+                <h2>General Settings</h2>
+                
+                <div class="setting-group">
+                    <h3>Extension Behavior</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="autoStart">
+                            Auto-start eye tracking on page load
+                        </label>
+                        <p class="setting-description">Automatically begin eye tracking when visiting new pages</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="showNotifications">
+                            Show notifications
+                        </label>
+                        <p class="setting-description">Display notifications for tracking status and errors</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="debugMode">
+                            Debug mode
+                        </label>
+                        <p class="setting-description">Enable console logging for troubleshooting</p>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Privacy & Data</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="localProcessing" checked disabled>
+                            Process data locally only
+                        </label>
+                        <p class="setting-description">All eye tracking data is processed on your device (always enabled)</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <button id="clearData" class="secondary-button">Clear All Data</button>
+                        <p class="setting-description">Remove all stored settings and calibration data</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Eye Tracking Settings Tab -->
+            <section id="tracking" class="tab-content">
+                <h2>Eye Tracking Configuration</h2>
+                
+                <div class="setting-group">
+                    <h3>Display Settings</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="showGazeCursor">
+                            Show gaze cursor
+                        </label>
+                        <p class="setting-description">Display a visual indicator of where you're looking</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Cursor size
+                            <input type="range" id="cursorSize" min="10" max="50" value="20">
+                            <span id="cursorSizeValue">20px</span>
+                        </label>
+                        <p class="setting-description">Adjust the size of the gaze cursor</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Cursor opacity
+                            <input type="range" id="cursorOpacity" min="0.1" max="1.0" step="0.1" value="0.8">
+                            <span id="cursorOpacityValue">0.8</span>
+                        </label>
+                        <p class="setting-description">Adjust transparency of the gaze cursor</p>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Tracking Performance</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Smoothness
+                            <input type="range" id="trackingSmoothness" min="0.1" max="1.0" step="0.1" value="0.3">
+                            <span id="smoothnessValue">0.3</span>
+                        </label>
+                        <p class="setting-description">Higher values make gaze movement smoother but less responsive</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Update rate (FPS)
+                            <select id="updateRate">
+                                <option value="15">15 FPS (Battery Saver)</option>
+                                <option value="30" selected>30 FPS (Balanced)</option>
+                                <option value="60">60 FPS (Performance)</option>
+                            </select>
+                        </label>
+                        <p class="setting-description">Higher frame rates provide smoother tracking but use more battery</p>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Calibration</h3>
+                    
+                    <button id="startCalibration" class="primary-button">Start Calibration</button>
+                    <p class="setting-description">Improve tracking accuracy by calibrating to your eyes and screen setup</p>
+                    
+                    <div class="calibration-status" id="calibrationStatus">
+                        <p>Last calibrated: Never</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gestures Settings Tab -->
+            <section id="gestures" class="tab-content">
+                <h2>Gesture Configuration</h2>
+                
+                <div class="setting-group">
+                    <h3>Blink Controls</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="enableBlinkClick">
+                            Enable blink-to-click
+                        </label>
+                        <p class="setting-description">Double blink to simulate mouse click</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Blink sensitivity
+                            <input type="range" id="blinkSensitivity" min="0.1" max="1.0" step="0.1" value="0.7">
+                            <span id="blinkSensitivityValue">0.7</span>
+                        </label>
+                        <p class="setting-description">Lower values require more deliberate blinks</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            Double blink window
+                            <input type="range" id="blinkWindow" min="300" max="1500" step="100" value="800">
+                            <span id="blinkWindowValue">800ms</span>
+                        </label>
+                        <p class="setting-description">Time window for detecting double blinks</p>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Advanced Gestures (Coming Soon)</h3>
+                    
+                    <div class="setting-item disabled">
+                        <label class="setting-label">
+                            <input type="checkbox" id="winkRightClick" disabled>
+                            Wink for right-click
+                        </label>
+                        <p class="setting-description">Single wink to simulate right-click menu</p>
+                    </div>
+                    
+                    <div class="setting-item disabled">
+                        <label class="setting-label">
+                            <input type="checkbox" id="gazeScroll" disabled>
+                            Gaze edge scrolling
+                        </label>
+                        <p class="setting-description">Look at screen edges to scroll</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Help Tab -->
+            <section id="help" class="tab-content">
+                <h2>Help & Support</h2>
+                
+                <div class="help-section">
+                    <h3>Getting Started</h3>
+                    <div class="help-content">
+                        <ol>
+                            <li><strong>Grant Camera Permission:</strong> Click the extension icon and allow camera access when prompted.</li>
+                            <li><strong>Start Tracking:</strong> Click "Start Tracking" in the popup to begin eye tracking.</li>
+                            <li><strong>Calibrate:</strong> Run calibration for better accuracy (recommended).</li>
+                            <li><strong>Navigate:</strong> Look around the screen to move the gaze cursor.</li>
+                            <li><strong>Click:</strong> Double blink to click on elements.</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="help-section">
+                    <h3>Troubleshooting</h3>
+                    <div class="help-content">
+                        <div class="faq-item">
+                            <h4>Camera permission denied?</h4>
+                            <p>Check your browser's camera settings and ensure EyeTrack has permission to access your camera.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>Tracking not accurate?</h4>
+                            <p>Try running calibration and ensure good lighting conditions. Position yourself 50-70cm from the screen.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>Performance issues?</h4>
+                            <p>Lower the update rate in tracking settings or close other camera-using applications.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="help-section">
+                    <h3>About</h3>
+                    <div class="help-content">
+                        <p><strong>EyeTrack Browser v0.1.0</strong></p>
+                        <p>Built with WebEyeTrack technology for accessible web browsing.</p>
+                        <p>
+                            <a href="https://github.com/redforestai/webeyetrack" target="_blank">GitHub Repository</a> |
+                            <a href="https://redforestai.github.io/WebEyeTrack" target="_blank">Project Website</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-actions">
+                <button id="resetSettings" class="secondary-button">Reset to Defaults</button>
+                <button id="exportSettings" class="secondary-button">Export Settings</button>
+                <button id="importSettings" class="secondary-button">Import Settings</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+            </div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>

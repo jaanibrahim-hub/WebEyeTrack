@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeTrack Browser</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <header class="popup-header">
+            <img src="../assets/icon32.png" alt="EyeTrack" class="logo">
+            <h1>EyeTrack Browser</h1>
+        </header>
+        
+        <main class="popup-content">
+            <!-- Status Section -->
+            <section class="status-section">
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Checking...</span>
+                </div>
+                <button id="toggleButton" class="toggle-button" disabled>
+                    <span id="toggleText">Loading...</span>
+                </button>
+            </section>
+
+            <!-- Quick Settings -->
+            <section class="settings-section">
+                <h3>Quick Settings</h3>
+                
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="showCursor">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Show Gaze Cursor</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="blinkSensitivity">Blink Sensitivity</label>
+                    <input type="range" id="blinkSensitivity" min="0.1" max="1.0" step="0.1" value="0.7">
+                    <span id="blinkValue">0.7</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="gazeSmoothness">Gaze Smoothness</label>
+                    <input type="range" id="gazeSmoothness" min="0.1" max="1.0" step="0.1" value="0.3">
+                    <span id="gazeValue">0.3</span>
+                </div>
+            </section>
+
+            <!-- Actions -->
+            <section class="actions-section">
+                <button id="calibrateButton" class="action-button">
+                    <span class="button-icon">🎯</span>
+                    Calibrate Eye Tracking
+                </button>
+                
+                <button id="helpButton" class="action-button secondary">
+                    <span class="button-icon">❓</span>
+                    Help & Tutorial
+                </button>
+            </section>
+
+            <!-- Permissions -->
+            <section class="permissions-section" id="permissionsSection" style="display: none;">
+                <div class="permission-alert">
+                    <h4>⚠️ Camera Permission Required</h4>
+                    <p>EyeTrack needs access to your camera for eye tracking. Click the button below to grant permission.</p>
+                    <button id="requestPermission" class="permission-button">
+                        Grant Camera Permission
+                    </button>
+                </div>
+            </section>
+
+            <!-- Info -->
+            <section class="info-section">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Double Blink</span>
+                        <span class="info-value">Click</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Gaze</span>
+                        <span class="info-value">Move Cursor</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="popup-footer">
+            <a href="../options/options.html" target="_blank" class="options-link">
+                ⚙️ Advanced Settings
+            </a>
+            <div class="version">v0.1.0</div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

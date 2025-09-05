@@ -1,0 +1,14 @@
+EyeTrack Browser Extension v0.1.0
+Build Date: Fri Sep  5 20:50:38 UTC 2025
+Platform: Chrome Extensions (Manifest V3)
+Status: Demo Version Ready
+
+Files included:
+- manifest.json (Extension configuration)
+- src/ (Content scripts and background worker)
+- popup/ (Extension popup interface)
+- options/ (Advanced settings page)
+- assets/ (Icons and resources)
+
+Installation: Load as unpacked extension in Chrome
+Documentation: See INSTALL.md for detailed instructions
